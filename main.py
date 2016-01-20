@@ -18,17 +18,7 @@ database_connector = mysql.connector.connect(user='root', password=mitnezel, hos
 cursor = database_connector.cursor()
 
 
-def csvtosql():
-	with open("order_details.csv", "r") as order_details:
-		splitted_str = order_details.readline().split(";")
-		splitted_str = order_details.readline().split(";")
-		joined_str = ", ".join(splitted_str).strip("\n")
-		sql_str = "INSERT INTO orderdetails VALUES(" + joined_str + ");"
-		cursor.execute(sql_str)
-		database_connector.commit()
-
-
-def sqltocsv():
+def sql_to_csv():
 	with open("new_order_details.csv", "w") as new_order_details:
 		new_order_details.write("OrderID;ProductID;UnitPrice;Quantity;Discount" + "\n")
 	with open("new_order_details.csv", "a") as new_order_details:
@@ -42,4 +32,13 @@ def sqltocsv():
 				joined_str += str(int(j)) + ";"
 			new_order_details.write(joined_str[:(len(joined_str)-1)] + "\n")
 
-sqltocsv()
+
+def csv_to_sql():
+	with open("order_details.csv", "r") as order_details:
+		csv_row = order_details.readline()
+		for i in range(100):
+			csv_row = order_details.readline().split(";")
+			joined_str = ", ".join(csv_row).strip("\n")
+			sql_cmd = "INSERT INTO orderdetails VALUES(" + joined_str + ");"
+			cursor.execute(sql_cmd)
+			database_connector.commit()
