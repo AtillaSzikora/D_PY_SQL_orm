@@ -30,12 +30,16 @@ def csvtosql():
 
 def sqltocsv():
 	with open("new_order_details.csv", "w") as new_order_details:
-		sql_str = "SELECT * FROM orderdetails LIMIT 1;"
-		cursor.execute(sql_str)
-		csv_str = (cursor.fetchall())[0]
-		joined_str = ""
-		for i in csv_str:
-			joined_str += str(int(i)) + ";"
-		print(joined_str)
+		new_order_details.write("OrderID;ProductID;UnitPrice;Quantity;Discount" + "\n")
+	with open("new_order_details.csv", "a") as new_order_details:
+		sql_cmd = "SELECT * FROM orderdetails"
+		cursor.execute(sql_cmd)
+		sql_lst = cursor.fetchall()
+		for i in sql_lst:
+			sql_tpls = i
+			joined_str = ""
+			for j in sql_tpls:
+				joined_str += str(int(j)) + ";"
+			new_order_details.write(joined_str[:(len(joined_str)-1)] + "\n")
 
 sqltocsv()
